@@ -12,6 +12,7 @@ from src.models import Account, UpiId, PaymentRequest
 from src.auth.dependencies import get_current_user_token_payload
 from src.payments.schemas import TransferRequest, TransferResponse, CollectRequest, CollectResponse
 from src.payments.services import execute_transfer
+from src.ws.connection_manager import manager as ws_manager
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
@@ -95,8 +96,25 @@ async def request_collect(
         )
         session.add(pr)
     
-    # TODO: Phase 4 WebSockets - Push to `payer_user_id` channel
-    # TODO: Phase 4 Celery - Submit delayed task to mark EXPIRED if not actioned
+    # WebSocket Push Integration
+    async def _notify() -> None:
+        try:
+            await ws_manager.send_personal_message(
+                {
+                    "type": "COLLECT_REQUEST", 
+                    "amount_paise": req.amount_paise, 
+                    "from": req.from_vpa,
+                    "notes": req.notes
+                }, 
+                str(payer_upi.user_id)
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning("Failed to push WS notification: %s", e)
+            
+    # Normally we do this via background tasks but using await here since manager holds the socket directly
+    import asyncio
+    asyncio.create_task(_notify())
     
     return CollectResponse(
         request_id=pr.id, # type: ignore

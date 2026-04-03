@@ -17,7 +17,9 @@ dependencies = [
     "cryptography>=42.0.0",
     "passlib[argon2]>=1.7.4",
     "redis>=5.0.0",
-    "slowapi>=0.1.9"
+    "slowapi>=0.1.9",
+    "celery>=5.3.6",
+    "weasyprint>=61.0"
 ]
 
 [project.optional-dependencies]

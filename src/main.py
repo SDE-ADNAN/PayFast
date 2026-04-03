@@ -15,6 +15,8 @@ from src.redis_client import close_redis_pool, init_redis_pool
 from src.upi.router import router as upi_router
 from src.accounts.router import router as accounts_router
 from src.payments.router import router as payments_router
+from src.ws.router import router as ws_router
+from src.transactions.router import router as transactions_router
 from src.middleware.idempotency import IdempotencyMiddleware
 
 logger = structlog.get_logger()
@@ -54,6 +56,8 @@ app.include_router(auth_router)
 app.include_router(upi_router)
 app.include_router(accounts_router)
 app.include_router(payments_router)
+app.include_router(ws_router)
+app.include_router(transactions_router)
 
 
 @app.exception_handler(PayFastError)
