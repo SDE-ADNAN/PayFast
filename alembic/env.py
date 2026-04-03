@@ -22,8 +22,9 @@ import sys
 # Add the root directory to sys.path so we can import src
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from src.models import Base
 from src.config import settings
+from src.models import Base
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
