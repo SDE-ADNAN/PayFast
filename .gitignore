@@ -1,0 +1,9 @@
+./PayFast_Technical_Engineering_Spec.md
+
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+.mypy_cache/
