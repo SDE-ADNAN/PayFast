@@ -13,6 +13,9 @@ from src.database import engine
 from src.exceptions import PayFastError
 from src.redis_client import close_redis_pool, init_redis_pool
 from src.upi.router import router as upi_router
+from src.accounts.router import router as accounts_router
+from src.payments.router import router as payments_router
+from src.middleware.idempotency import IdempotencyMiddleware
 
 logger = structlog.get_logger()
 
@@ -45,9 +48,12 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
+app.add_middleware(IdempotencyMiddleware)
 
 app.include_router(auth_router)
 app.include_router(upi_router)
+app.include_router(accounts_router)
+app.include_router(payments_router)
 
 
 @app.exception_handler(PayFastError)
