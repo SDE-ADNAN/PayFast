@@ -23,6 +23,7 @@ from src.qr.router import router as qr_router
 from src.middleware.idempotency import IdempotencyMiddleware
 from src.middleware.tracing import TraceIDMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 logger = structlog.get_logger()
 
@@ -69,6 +70,19 @@ app = FastAPI(
 )
 
 Instrumentator().instrument(app).expose(app, include_in_schema=False)
+
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=["payfast.io", "*.payfast.io", "localhost", "127.0.0.1"]
+)
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    return response
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
