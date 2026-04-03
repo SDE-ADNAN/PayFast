@@ -8,3 +8,6 @@ __pycache__/
 .env
 .mypy_cache/
 *.egg-info/
+
+node_modules/
+.turbo/
