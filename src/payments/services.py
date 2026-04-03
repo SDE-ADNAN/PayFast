@@ -10,6 +10,7 @@ import random
 from src.models import Transaction, Account, UpiId
 from src.ledger.services import post_double_entry
 from src.exceptions import InsufficientFundsError, AccountFrozenError, ConcurrentModificationError
+from src.fraud.rules import evaluate_transaction_risk
 
 DAILY_LIMIT_PAISE = 1_00_000 * 100 # ₹1 Lakh
 
@@ -53,8 +54,18 @@ async def execute_transfer(
          
     try:
         # Check Daily Limits safely outside the massive pessimistic lock
-        await check_and_reserve_daily_limit(session, from_account_id, amount_paise)
-        
+        # Evaluate Fraud Signatures
+        risk_score = await evaluate_transaction_risk(session, from_account_id, amount_paise)
+        if risk_score >= 80:
+            async with session.begin():
+                account_to_freeze = await session.get(Account, from_account_id)
+                if account_to_freeze:
+                    account_to_freeze.status = "frozen" # type: ignore
+            raise HTTPException(
+                status_code=403, 
+                detail="Transaction declined due to suspicious activity. Account has been securely frozen."
+            )
+            
         async with session.begin():
             # Setup Transaction
             tx = Transaction(

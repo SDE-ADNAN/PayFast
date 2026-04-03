@@ -17,6 +17,9 @@ from src.accounts.router import router as accounts_router
 from src.payments.router import router as payments_router
 from src.ws.router import router as ws_router
 from src.transactions.router import router as transactions_router
+from src.disputes.router import router as disputes_router
+from src.admin.router import router as admin_router
+from src.qr.router import router as qr_router
 from src.middleware.idempotency import IdempotencyMiddleware
 
 logger = structlog.get_logger()
@@ -58,6 +61,9 @@ app.include_router(accounts_router)
 app.include_router(payments_router)
 app.include_router(ws_router)
 app.include_router(transactions_router)
+app.include_router(disputes_router)
+app.include_router(admin_router)
+app.include_router(qr_router)
 
 
 @app.exception_handler(PayFastError)
