@@ -21,8 +21,19 @@ from src.disputes.router import router as disputes_router
 from src.admin.router import router as admin_router
 from src.qr.router import router as qr_router
 from src.middleware.idempotency import IdempotencyMiddleware
+from src.middleware.tracing import TraceIDMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 logger = structlog.get_logger()
+
+structlog.configure(
+    processors=[
+        structlog.contextvars.merge_contextvars,
+        structlog.stdlib.add_log_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ]
+)
 
 # Limit configuration
 limiter = Limiter(key_func=get_remote_address)
@@ -47,13 +58,23 @@ app = FastAPI(
     title="PayFast API",
     description="Deep Technical Engineering Specification Implementation",
     version="0.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_tags=[
+        {"name": "auth", "description": "Authentication and User setup"},
+        {"name": "payments", "description": "Core P2P logic and Collection routes"},
+        {"name": "transactions", "description": "Read-replica metrics streams"}
+    ],
     lifespan=lifespan,
 )
+
+Instrumentator().instrument(app).expose(app, include_in_schema=False)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(IdempotencyMiddleware)
+app.add_middleware(TraceIDMiddleware)
 
 app.include_router(auth_router)
 app.include_router(upi_router)
