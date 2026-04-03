@@ -2,91 +2,107 @@
 
 🚀 **PayFast** is a high-performance, strictly asynchronous Core Payment Gateway architecture built natively on FastAPI, PostgreSQL, and Redis. Engineered strictly around rigorous financial principles, it enforces deterministic local-locks ensuring explicit double-entry mathematical integrity throughout thousands of highly concurrent money-transfer threads effortlessly!
 
+The UI layer is managed gracefully in a single **Turborepo** monorepo environment natively orchestrating both **Next.js** (Web) and **Expo / React Native** (Mobile) over unified topologies.
+
 ## System Overview
 
-Designed cleanly inside a 7-Phase modular rollout, PayFast natively balances extreme developer scalability bridging rigid real-world infrastructure parameters natively into dynamic Docker configurations.
+Designed cleanly inside a modular rollout, PayFast natively balances extreme developer scalability bridging rigid real-world infrastructure parameters natively into dynamic Docker configurations.
 
 ### Key Features
-- **Deterministic Double-Entry Ledger**: Maps transfers safely mapping `SELECT ... FOR UPDATE NOWAIT` inside strictly ordered UUID configurations preventing transaction deadlocks gracefully!
-- **Fraud Engine Signatures**: Dynamically inspects P2P execution triggers evaluating raw request signatures and temporal speed checks (Velocity Bounds) actively freezing accounts blocking large payload attacks immediately!
+- **Deterministic Double-Entry Ledger**: Maps transfers safely mapping `SELECT ... FOR UPDATE NOWAIT` preventing transaction deadlocks gracefully!
+- **Fraud Engine Signatures**: Dynamically inspects P2P execution triggers evaluating raw request signatures and freezing accounts actively on velocity spikes.
+- **Unified Monorepo Architecture**: Manages complex `React 19` and `TypeScript` ecosystems natively orchestrating Next.js and React Native builds simultaneously leveraging **Turborepo** caches out of the box.
+- **Premium User Interfaces**: Glassmorphism logic mapping strictly over customized `neon` glow tokens securely rendering interactive high-throughput interfaces flawlessly!
+- **WebSocket Webhooks**: Routes real-time JSON pull/collect requests seamlessly to connected native clients securely over WebSockets utilizing strict Token extraction geometries.
 - **Idempotency Wrappers**: Enforces a distributed cached locking geometry around execution states preventing duplicate processing vectors if client networks re-request data unexpectedly!
-- **WebSocket Webhooks**: Routes real-time JSON pull/collect requests seamlessly to connected native clients securely over WebSockets utilizing strict Token extraction geometries natively inside ASGI routines!
-- **Native PDF Streaming**: Configures raw historical transaction offsets emitting generated HTML logic seamlessly wrapping `weasyprint` dynamically exposing statement PDFs! 
-- **HMAC Triggers**: Autonomously structures Webhook outputs targeting massive outbound event endpoints explicitly via `Celery` task threads wrapped in `X-PayFast-Signature` hashes executing safely via delayed retries!
-- **Dynamic QR Ecosystems**: Embeds dynamic URI targets inside heavily formatted HTTP payloads implicitly streaming raw `image/png` maps formatted precisely for user phones dynamically generating endpoints on load!
 
 ---
 
 ## Technical Stack
 
+### Shared / Root Infrastructure
+- **Monorepo Manager**: `Turborepo` via native `NPM Workspaces`.
+- **Relational Base**: `PostgreSQL 16` paired precisely with `alembic` & `asyncpg`.
+- **Cache**: `Redis 7` mapped natively into API `slowapi` boundaries.
+
+### Backend (`src/`)
 - **Framework**: `FastAPI` + `uvicorn` (ASGI / asyncio mapping).
-- **Relational Data Base**: `PostgreSQL 16` paired precisely with `alembic` & `asyncpg`.
-- **Cache / Distributed Locks**: `Redis 7` mapped natively into API `slowapi` boundaries.
-- **Asynchronous Execution Manager**: `Celery` + `redis` acting specifically tracking background Cronjobs securely natively wrapping `acks_late=True` queue execution routines.
-- **Cryptography & Tokens**: Custom integration generating ephemeral RS256 token mappings validating dynamically against raw `argon2` authentication wrappers.
-- **Observability**: Raw structural processing mapped universally over `structlog` & explicit Metric hooks outputting Prometheus compatible endpoint mappings transparently dynamically scaling into Grafana bounds locally.
-- **Container Infrastructure**: Terraform topologies built purely structurally targeting Fargate executing ECS deployment models automatically linked safely inside customized minimal `Dockerfile` bindings utilizing continuous `OIDC` GitHub integrations!
+- **Asynchronous Execution**: `Celery` + `redis` tracking background Cronjobs securely.
+- **Deploy**: Customized `Dockerfile` configurations targeting `Terraform` orchestrators over AWS Fargate natively.
+
+### Frontend Applications (`apps/`)
+- **Web App (`apps/web`)**: Next.js 15 App Router natively triggering Server Actions executing exclusively via Vanilla CSS Modules.
+- **Mobile App (`apps/mobile`)**: Expo natively integrated via `expo-router` running strictly over 60FPS fluid UI parameters.
 
 ---
 
 ## Quick Setup
 
-> **Note**: Operating `PayFast` locally actively requires a local execution of Docker configuring internal Postgres architectures natively alongside internal Redis mappings locally before executing APIs successfully to prevent local binding failures!
+> **Note**: Operating `PayFast` locally actively requires a local execution of Docker configuring internal Postgres architectures natively alongside internal Redis mappings locally before executing APIs successfully.
 
-### 1. Launch Platform Dependencies
+### 1. Launch Platform Dependencies (Backend)
 ```bash
 docker-compose up -d
 ```
-This securely constructs the `10.x` native Postgres execution instance bounding internal data targets natively securely onto `5432`.
+This securely constructs the Native Postgres execution instance on `5432` and Redis cache target globally.
 
-### 2. Configure Python Topologies
-Configure native testing sets properly evaluating local system configurations:
-*(If generating transaction PDFs, natively install `pango`/`cairo` locally!)*
+### 2. Configure Python Backend Target
+
+Execute these sequentially to deploy your Python architectures correctly:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -e .
-```
-
-### 3. Apply Schema Topology
-```bash
 alembic upgrade head
-```
-
-### 4. Execute Backend Target
-```bash
 uvicorn src.main:app --reload
 ```
 
-Your system is officially active! Launch into standard endpoint parsing locally explicitly:
-- **Telemetry Specifications**: `http://localhost:8000/metrics`
-- **Application Endpoints**: `http://localhost:8000/docs`
-- **Component Renderings**: `http://localhost:8000/redoc`
+Your API is now active locally natively streaming on `http://127.0.0.1:8000`
+
+### 3. Launch UI Ecosystems (Turborepo)
+Launch into standard client parsing sequentially spinning up both the **Next.js Web App** and **React Native Mobile App** in parallel pipelines!
+
+```bash
+npm install
+npm run dev
+```
+
+If you prefer to independently run either ecosystem:
+- **Web Only**: `npx turbo run dev --filter=web`
+- **Mobile Only**: `npx turbo run dev --filter=mobile`
+
+*(Next.js will naturally bind to `http://localhost:3000` executing seamlessly).*
+
+---
+
+## Code Quality & Builds
+
+We securely wrap all pipelines checking strict TypeScript formatting alongside native python checks!
+
+**Validate TS Compilations (Across Web & Mobile):**
+```bash
+npx turbo run build
+```
+
+**Validate Python Backend Integrity:**
+```bash
+pytest
+```
 
 ---
 
 ## AWS Containerization Bounds
 
-Deploy natively configuring pure infrastructure configurations natively dropping components out to external production execution environments seamlessly leveraging Amazon!
+Deploy natively configuring pure infrastructure configurations dropping components out to external production execution environments seamlessly leveraging Amazon!
 
-1. Compile the framework inside securely built minimal structures mapping out execution parameters securely via:
+1. Compile the framework inside securely built minimal structures:
 ```bash
 docker build -t payfast .
 ```
-2. Navigate securely routing into Amazon structures implicitly initializing local contexts transparently mapping secure state definitions safely:
+2. Navigate securely routing into Amazon structures recursively mapping local states safely:
 ```bash
 cd terraform
 terraform init
 terraform apply 
 ```
-3. Watch out your execution routines run dynamically over local Github hooks executing natively inside `.github/workflows/deploy.yml` cleanly pushing securely!
-
----
-
-## Development & Test
-
-We natively assert functionality executing rigorous synchronous bindings checking logic safely simulating test clients properly against WebSocket logic dynamically mapping routes optimally:
-
-```bash
-pytest
-```
+3. Your CI/CD triggers dynamically execute over local Github hooks inside `.github/workflows/deploy.yml` cleanly.
